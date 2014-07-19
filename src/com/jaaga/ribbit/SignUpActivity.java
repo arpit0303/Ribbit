@@ -1,20 +1,18 @@
 package com.jaaga.ribbit;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.AlertDialog.Builder;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.os.Build;
 
 public class SignUpActivity extends Activity {
 
@@ -26,6 +24,7 @@ public class SignUpActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_sign_up);
 		
 		mUsername = (EditText) findViewById(R.id.editText1);
@@ -50,7 +49,36 @@ public class SignUpActivity extends Activity {
 					dialog.show();
 				}
 				else{
+					//create a new user!
+					setProgressBarIndeterminateVisibility(true);
+					ParseUser newuser = new ParseUser();
+					newuser.setUsername(username);
+					newuser.setPassword(password);
+					newuser.setEmail(email);
 					
+					newuser.signUpInBackground(new SignUpCallback() {
+						
+						@Override
+						public void done(ParseException e) {
+							setProgressBarIndeterminateVisibility(false);
+							
+							if(e == null){
+								//success!
+								Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+								intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+								intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+								startActivity(intent);
+							}
+							else{
+								AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+								builder.setTitle("Oops!").setMessage(e.getMessage())
+								.setPositiveButton(android.R.string.ok, null);
+								
+								AlertDialog dialog = builder.create();
+								dialog.show();
+							}
+						}
+					});
 				}
 			}
 		});

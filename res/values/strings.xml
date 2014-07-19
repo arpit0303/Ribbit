@@ -15,5 +15,6 @@
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="email_hint">Email</string>
     <string name="error_msg">Enter all the data: Username, Password, Email</string>
-
+ 	<string name="login_error_msg">Enter all the data: Username and Password</string>
+ 	<string name="menu_logout_label">LogOut</string>
 </resources>
