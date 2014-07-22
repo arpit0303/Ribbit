@@ -73,6 +73,8 @@ public class EditFriendsActivity extends ListActivity {
 							android.R.layout.simple_list_item_checked,
 							usernames);
 					setListAdapter(adapter);
+					
+					addFriendCheckMarks();
 
 				} else {
 					Log.e(TAG, e.getMessage());
@@ -84,7 +86,7 @@ public class EditFriendsActivity extends ListActivity {
 					AlertDialog dialog = builder.create();
 					dialog.show();
 				}
-			}
+			}	
 		});
 	}
 
@@ -125,6 +127,8 @@ public class EditFriendsActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		
+		setProgressBarIndeterminateVisibility(true);
+		
 		if(getListView().isItemChecked(position)){
 			//add Friends
 			mFriendsRelation.add(musers.get(position));
@@ -132,6 +136,7 @@ public class EditFriendsActivity extends ListActivity {
 				
 				@Override
 				public void done(ParseException e) {
+					setProgressBarIndeterminateVisibility(false);
 					if(e != null){
 						Log.e(TAG, e.getMessage());
 						
@@ -141,7 +146,42 @@ public class EditFriendsActivity extends ListActivity {
 		}
 		else{
 			//Remove Friends
+			mFriendsRelation.remove(musers.get(position));
+			mCurrentUser.saveInBackground(new SaveCallback() {
+				
+				@Override
+				public void done(ParseException e) {
+					setProgressBarIndeterminateVisibility(false);
+					if(e != null){
+						Log.e(TAG, e.getMessage());
+						
+					}
+				}
+			});
 		}
-		
+	}
+	
+	private void addFriendCheckMarks() {
+		mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+			
+			@Override
+			public void done(List<ParseUser> friends, ParseException e) {
+				if(e == null){
+					//list returned - look for a match
+					for(int i=0; i<musers.size(); i++){
+						ParseUser user = musers.get(i);
+						
+						for(ParseUser friend: friends){
+							if(friend.getObjectId().equals(user.getObjectId())){
+								getListView().setItemChecked(i, true);
+							}
+	 					}
+					}
+				}
+				else{
+					Log.e(TAG, e.getMessage());
+				}
+			}
+		});
 	}
 }
