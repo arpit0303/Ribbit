@@ -100,13 +100,6 @@ public class EditFriendsActivity extends ListActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.edit_friends, menu);
-		return true;
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -132,33 +125,23 @@ public class EditFriendsActivity extends ListActivity {
 		if(getListView().isItemChecked(position)){
 			//add Friends
 			mFriendsRelation.add(musers.get(position));
-			mCurrentUser.saveInBackground(new SaveCallback() {
-				
-				@Override
-				public void done(ParseException e) {
-					setProgressBarIndeterminateVisibility(false);
-					if(e != null){
-						Log.e(TAG, e.getMessage());
-						
-					}
-				}
-			});
 		}
 		else{
 			//Remove Friends
 			mFriendsRelation.remove(musers.get(position));
-			mCurrentUser.saveInBackground(new SaveCallback() {
-				
-				@Override
-				public void done(ParseException e) {
-					setProgressBarIndeterminateVisibility(false);
-					if(e != null){
-						Log.e(TAG, e.getMessage());
-						
-					}
-				}
-			});
 		}
+		
+		mCurrentUser.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				setProgressBarIndeterminateVisibility(false);
+				if(e != null){
+					Log.e(TAG, e.getMessage());
+					
+				}
+			}
+		});
 	}
 	
 	private void addFriendCheckMarks() {

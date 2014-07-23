@@ -4,20 +4,20 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
 
 import com.parse.ParseUser;
 
@@ -39,10 +39,40 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     ViewPager mViewPager;
 
 	public static final String TAG = MainActivity.class.getSimpleName();
-
+	
+	private static final int TAKE_PHOTO_REQUEST = 0;
+	private static final int TAKE_VIDEO_REQUEST = 1;
+	private static final int PICK_PHOTO_REQUEST = 2;
+	private static final int PICK_VIDEO_REQUEST = 3;
+	
+	protected DialogInterface.OnClickListener mDialogListener =
+			new DialogInterface.OnClickListener() {
+		
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+			case 0:
+				//Take Picture
+				Intent TakePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				startActivityForResult(TakePhotoIntent, TAKE_PHOTO_REQUEST);
+				break;
+			case 1:
+				//Take Video
+				break;
+			case 2:
+				//Choose Picture
+				break;
+			case 3:
+				//Choose Video
+				break;
+			}
+		}
+	};
+			
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
         
         ParseUser currentuser = ParseUser.getCurrentUser();
@@ -112,16 +142,23 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_logout) {
-        	ParseUser.logOut();
+        
+        switch (id) {
+		case R.id.action_logout:
+			ParseUser.logOut();
         	navigateToLogin();
-            //return true;
-        }
-        else if(id == R.id.action_edit_friends){
-        	Intent intent = new Intent(this,EditFriendsActivity.class);
+        	
+		case R.id.action_edit_friends:
+			Intent intent = new Intent(this,EditFriendsActivity.class);
         	startActivity(intent);
         	
-        }
+		case R.id.action_camera:
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			builder.setItems(R.array.camera_choices, mDialogListener);
+			
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
         
         return super.onOptionsItemSelected(item);
     }
@@ -141,6 +178,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+    
+    
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -182,30 +221,5 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
     }
 
-    /**
-     * A Inbox fragment containing a Inbox media.
-     */
-    public static class InboxFragment extends ListFragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_inbox, container, false);
-            return rootView;
-        }
-    }
-    
-    /**
-     * A Friends fragment containing a list of Friends.
-     */
-    public static class FriendsFragment extends ListFragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
-            return rootView;
-        }
-    }
 
 }
