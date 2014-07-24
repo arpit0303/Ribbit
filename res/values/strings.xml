@@ -28,5 +28,6 @@
         <item >Choose Picture</item>
         <item >Choose Video</item>
     </string-array>
+        <string name="error_external_storage">There was a problem accessing your device\'s external storage</string>
 
 </resources>

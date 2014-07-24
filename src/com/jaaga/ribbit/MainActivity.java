@@ -1,5 +1,8 @@
 package com.jaaga.ribbit;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -10,7 +13,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -45,6 +51,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	private static final int PICK_PHOTO_REQUEST = 2;
 	private static final int PICK_VIDEO_REQUEST = 3;
 	
+	private static final int MEDIA_TYPE_IMAGE = 4;
+	private static final int MEDIA_TYPE_VIDEO = 5;
+	
+	protected Uri mMediaUri;
+	
 	protected DialogInterface.OnClickListener mDialogListener =
 			new DialogInterface.OnClickListener() {
 		
@@ -54,8 +65,19 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			case 0:
 				//Take Picture
 				Intent TakePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				startActivityForResult(TakePhotoIntent, TAKE_PHOTO_REQUEST);
+				mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+				if(mMediaUri == null){
+					//Display an Error
+					Toast.makeText(MainActivity.this, 
+							R.string.error_external_storage, 
+							Toast.LENGTH_SHORT).show();
+				}
+				else{
+					TakePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+					startActivityForResult(TakePhotoIntent, TAKE_PHOTO_REQUEST);
+				}
 				break;
+				
 			case 1:
 				//Take Video
 				break;
@@ -66,6 +88,62 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				//Choose Video
 				break;
 			}
+		}
+
+		private Uri getOutputMediaFileUri(int mediaType) {
+			//To be safe,you should check that the SDcard is mounted
+			//using Environment.getExternalStorageState().
+			if(isExternalStorageAvailable()){
+				//get the Uri
+				
+				//1.Get the External Storage Directory
+				String appName = MainActivity.this.getString(R.string.app_name);
+				File mediaStorageDir = new File(
+						Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+						appName);
+				
+				//2.Create our Sub-Directory
+				if(!mediaStorageDir.exists()){
+					if(!mediaStorageDir.mkdirs()){
+						Log.e(TAG, "Failed to create Directory.");
+						return null;
+					}
+				}
+				
+				//3.Create a file name
+				//4.Create the file
+				File mediaFile;
+				Date now = new Date();
+				String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(now);
+				
+				String path = mediaStorageDir.getPath() + File.separator;
+				if(mediaType == MEDIA_TYPE_IMAGE){
+					mediaFile = new File(path + "IMG_" + timestamp + ".jpg");
+				}
+				else if(mediaType == MEDIA_TYPE_VIDEO){
+					mediaFile = new File(path + "VID_" + timestamp + ".mp4");
+				}
+				else
+					return null;
+				
+				Log.d(TAG, "File: " + Uri.fromFile(mediaFile));
+				
+				//5.Return the file's Uri
+				return Uri.fromFile(mediaFile);
+			}
+			else{
+				return null;
+			}
+				
+		}
+		
+		private boolean isExternalStorageAvailable(){
+			String state = Environment.getExternalStorageState();
+			
+			if(state.equals(Environment.MEDIA_MOUNTED))
+				return true;
+			else
+				return false;
 		}
 	};
 			
