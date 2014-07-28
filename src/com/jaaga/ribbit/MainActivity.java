@@ -80,9 +80,26 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				
 			case 1:
 				//Take Video
+				Intent TakeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+				mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+				if(mMediaUri == null){
+					//Display an Error
+					Toast.makeText(MainActivity.this, 
+							R.string.error_external_storage, 
+							Toast.LENGTH_SHORT).show();
+				}
+				else{
+					TakeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+					TakeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 60);
+					TakeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);//0 = low resolution, 1 = high 
+					startActivityForResult(TakeVideoIntent, TAKE_VIDEO_REQUEST);
+				}
 				break;
 			case 2:
 				//Choose Picture
+				Intent ChoosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+				ChoosePhotoIntent.setType("image/*");
+				startActivityForResult(ChoosePhotoIntent, PICK_PHOTO_REQUEST);
 				break;
 			case 3:
 				//Choose Video
@@ -198,6 +215,32 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	super.onActivityResult(requestCode, resultCode, data);
+    	
+    	if(resultCode == RESULT_OK){
+    		//add it to the Gallery
+    		
+    		if(requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST){
+    			if(data ==null){
+    				Toast.makeText(MainActivity.this, getString(R.string.general_error),
+    						Toast.LENGTH_LONG).show();
+    			}
+    			else{
+    				
+    			}
+    		}
+    		
+    		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+    		mediaScanIntent.setData(mMediaUri);
+    		sendBroadcast(mediaScanIntent);
+    	}
+    	else if(resultCode != RESULT_CANCELED){
+    		Toast.makeText(MainActivity.this, R.string.general_error, Toast.LENGTH_LONG).show();
+    	}
+    }
+    
 	private void navigateToLogin() {
 		Intent intent = new Intent(this, LoginActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

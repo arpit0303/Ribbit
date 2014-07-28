@@ -68,6 +68,7 @@ public final class R {
         public static final int empty_inbox=0x7f050010;
         public static final int error_external_storage=0x7f050015;
         public static final int error_msg=0x7f05000d;
+        public static final int general_error=0x7f050016;
         public static final int hello_world=0x7f050006;
         public static final int login_button=0x7f050009;
         public static final int login_error_msg=0x7f05000e;
