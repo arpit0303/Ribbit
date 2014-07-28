@@ -228,13 +228,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     						Toast.LENGTH_LONG).show();
     			}
     			else{
-    				
+    				mMediaUri = data.getData();
     			}
     		}
-    		
-    		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-    		mediaScanIntent.setData(mMediaUri);
-    		sendBroadcast(mediaScanIntent);
+    		else{
+	    		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    		mediaScanIntent.setData(mMediaUri);
+	    		sendBroadcast(mediaScanIntent);
+    		}
     	}
     	else if(resultCode != RESULT_CANCELED){
     		Toast.makeText(MainActivity.this, R.string.general_error, Toast.LENGTH_LONG).show();
