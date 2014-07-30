@@ -274,6 +274,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	    		mediaScanIntent.setData(mMediaUri);
 	    		sendBroadcast(mediaScanIntent);
     		}
+    		
+    		Intent RecipientsIntent = new Intent(MainActivity.this, RecipientsActivity.class);
+    		RecipientsIntent.setData(mMediaUri);
+    		startActivity(RecipientsIntent);
     	}
     	else if(resultCode != RESULT_CANCELED){
     		Toast.makeText(MainActivity.this, R.string.general_error, Toast.LENGTH_LONG).show();
