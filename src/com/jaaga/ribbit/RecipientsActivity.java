@@ -1,9 +1,12 @@
 package com.jaaga.ribbit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -11,14 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class RecipientsActivity extends ListActivity {
 
@@ -29,6 +37,9 @@ public class RecipientsActivity extends ListActivity {
 	
 	protected MenuItem mSendMenuItem;
 	
+	protected Uri mMediaUri;
+	protected String mFileType;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,6 +49,9 @@ public class RecipientsActivity extends ListActivity {
 		setupActionBar();
 		
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		mMediaUri = getIntent().getData();
+		mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
+		
 	}
 
     @Override
@@ -117,9 +131,83 @@ public class RecipientsActivity extends ListActivity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.action_send:
+			ParseObject message = CreateMessage();
+			
+			if(message == null){
+				//error
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("We're sorry!").setMessage("There was a problem with file selecting. Please select another file")
+				.setPositiveButton(android.R.string.ok, null);
+				AlertDialog dialog = builder.create();
+				dialog.show();
+			}
+			else{
+				send(message);
+				finish();
+				
+			}
+			
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void send(ParseObject message) {
+		message.saveInBackground(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				if(e == null){
+					//success
+					Toast.makeText(RecipientsActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
+				}
+				else{
+					AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
+					builder.setTitle("We're sorry!").setMessage("There was a problem with sending your message. Please try again")
+					.setPositiveButton(android.R.string.ok, null);
+					AlertDialog dialog = builder.create();
+					dialog.show();
+					
+				}
+				
+			}
+		});
+	}
+
+	private ParseObject CreateMessage() {
+		ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGE);
+		message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+		message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
+		message.put(ParseConstants.KEY_RECIPIENTS_IDs, getRecipientsIds());
+		message.put(ParseConstants.KEY_FILE_TYPE, mFileType);
+		
+		byte[] fileBytes = FileHelper.getByteArrayFromFile(RecipientsActivity.this, mMediaUri);
+		
+		if(fileBytes == null){
+			return null;
+		}
+		else{
+			if(mFileType.equals(ParseConstants.TYPE_IMAGE)){
+				fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+			}
+			
+			String fileName = FileHelper.getFileName(RecipientsActivity.this, 
+					mMediaUri, mFileType);
+			ParseFile file = new ParseFile(fileName, fileBytes);
+			message.put(ParseConstants.KEY_FILE, file);
+			return message;
+		}
+		
+	}
+
+	private ArrayList<String> getRecipientsIds() {
+		ArrayList<String> recipientIds = new ArrayList<String>();
+		for(int i=0; i<getListView().getCount(); i++ ){
+			if(getListView().isItemChecked(i)){
+				recipientIds.add(mFriends.get(i).getObjectId());
+			}
+		}
+		return recipientIds;
 	}
 
 	@Override

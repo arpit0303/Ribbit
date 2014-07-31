@@ -240,6 +240,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     			}
     			
     			Log.i(TAG, "Media Uri: "+mMediaUri);
+    			
     			if(requestCode == PICK_VIDEO_REQUEST){
     				//make sure the selected file is less than 10MB.
     				int fileSize = 0;
@@ -277,6 +278,16 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     		
     		Intent RecipientsIntent = new Intent(MainActivity.this, RecipientsActivity.class);
     		RecipientsIntent.setData(mMediaUri);
+    		
+    		String fileType;
+    		if(requestCode == TAKE_PHOTO_REQUEST || requestCode == PICK_PHOTO_REQUEST){
+    			fileType = ParseConstants.TYPE_IMAGE;
+    		}
+    		else{
+    			fileType = ParseConstants.TYPE_VIDEO;
+    		}
+    		
+    		RecipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType); 
     		startActivity(RecipientsIntent);
     	}
     	else if(resultCode != RESULT_CANCELED){
