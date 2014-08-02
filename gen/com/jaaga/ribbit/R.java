@@ -27,25 +27,30 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f040000;
         public static final int activity_vertical_margin=0x7f040001;
+        public static final int message_list_item_vertical_margin=0x7f040002;
     }
     public static final class drawable {
         public static final int ic_action_camera=0x7f020000;
-        public static final int ic_action_send_now=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
+        public static final int ic_action_picture=0x7f020001;
+        public static final int ic_action_play_over_video=0x7f020002;
+        public static final int ic_action_send_now=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
     }
     public static final class id {
-        public static final int action_camera=0x7f09000b;
-        public static final int action_edit_friends=0x7f090009;
-        public static final int action_logout=0x7f09000a;
-        public static final int action_send=0x7f09000c;
+        public static final int action_camera=0x7f09000d;
+        public static final int action_edit_friends=0x7f09000b;
+        public static final int action_logout=0x7f09000c;
+        public static final int action_send=0x7f09000e;
         public static final int editText1=0x7f090005;
         public static final int editText2=0x7f090006;
         public static final int editText3=0x7f090007;
         public static final int login=0x7f090002;
+        public static final int messageIcon=0x7f090009;
         public static final int pager=0x7f090004;
         public static final int password=0x7f090001;
         public static final int signupText=0x7f090003;
         public static final int signupbutton=0x7f090008;
+        public static final int snederLabel=0x7f09000a;
         public static final int username=0x7f090000;
     }
     public static final class layout {
@@ -56,6 +61,7 @@ public final class R {
         public static final int activity_sign_up=0x7f030004;
         public static final int fragment_friends=0x7f030005;
         public static final int fragment_inbox=0x7f030006;
+        public static final int message_item=0x7f030007;
     }
     public static final class menu {
         public static final int main=0x7f080000;
