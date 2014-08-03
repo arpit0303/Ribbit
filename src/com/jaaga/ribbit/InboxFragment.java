@@ -51,11 +51,10 @@ public class InboxFragment extends ListFragment {
 						usernames[i] = message.getString(ParseConstants.KEY_SENDER_NAME);
 						i++;
 					}
-	
-					ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-							getListView().getContext(),
-							android.R.layout.simple_list_item_1,
-							usernames);
+					
+					MessageAdapter adapter = new MessageAdapter(
+							getListView().getContext(), 
+							mMessages);
 					setListAdapter(adapter);
 				}
 			}
