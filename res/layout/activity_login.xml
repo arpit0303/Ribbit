@@ -2,49 +2,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.jaaga.ribbit.LoginActivity$PlaceholderFragment" >
+    tools:context="com.jaaga.ribbit.LoginActivity$PlaceholderFragment"
+    style="@style/AuthBackground">
 
-    <EditText
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitStart"
+        android:src="@drawable/background"
+        android:contentDescription="@string/content_desc_background" />
+    
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="@string/app_name"
+        android:textSize="60sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:text="@string/subtitle"
+        android:textSize="13sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <LinearLayout 
+        android:id="@+id/editTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/subtitle"
+        android:layout_marginTop="@dimen/login_vartical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/login_horizontal_padding"
+        android:paddingRight="@dimen/login_horizontal_padding"
+        android:paddingTop="@dimen/login_vartical_padding"
+        android:paddingBottom="@dimen/login_vartical_padding"
+        android:background="@android:color/white">
+        
+        <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:ems="10"
-        android:hint="@string/username_hint" >
-
-        <requestFocus />
-    </EditText>
-
-    <EditText
+        android:hint="@string/username_hint"
+        android:textColorHint="@color/light_gray"
+        android:textSize="17sp" />
+        
+        <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/username"
-        android:layout_below="@+id/username"
         android:ems="10"
         android:hint="@string/password_hint"
-        android:inputType="textPassword" />
-
+        android:inputType="textPassword"
+        android:textColorHint="@color/light_gray"
+        android:textSize="17sp"  />
+        
+    </LinearLayout>
+   
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/password"
-        android:layout_below="@+id/password"
-        android:text="@string/login_button" />
+        android:layout_below="@id/editTextLayout"
+        android:layout_alignParentLeft="true"
+        android:text="@string/login_button"
+        android:background="@drawable/button_custom"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:textSize="13sp"
+        android:textColor="@color/text_color" />
 
     <TextView
         android:id="@+id/signupText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login"
+        android:layout_below="@id/login"
+        android:layout_marginTop="12dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="133dp"
-        android:text="@string/signup_text" />
-
+        android:text="@string/signup_text"
+        android:textColor="@android:color/white" />
+    
 </RelativeLayout>

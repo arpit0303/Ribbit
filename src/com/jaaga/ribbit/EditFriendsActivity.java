@@ -45,6 +45,7 @@ public class EditFriendsActivity extends ListActivity {
 
 		mCurrentUser = ParseUser.getCurrentUser();
 		mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
+		Log.d(TAG,mFriendsRelation.getQuery().getClassName());
 		
 		setProgressBarIndeterminateVisibility(true);
 		

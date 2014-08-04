@@ -55,6 +55,15 @@
         <activity
             android:name="com.jaaga.ribbit.RecipientsActivity"
             android:label="@string/title_activity_recipients"
+            android:parentActivityName="com.jaaga.ribbit.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jaaga.ribbit.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.jaaga.ribbit.ViewImageActivity"
+            android:label="@string/title_activity_view_image"
             android:parentActivityName="com.jaaga.ribbit.MainActivity" android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

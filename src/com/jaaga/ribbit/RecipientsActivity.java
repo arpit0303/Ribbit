@@ -136,7 +136,7 @@ public class RecipientsActivity extends ListActivity {
 			if(message == null){
 				//error
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("We're sorry!").setMessage("There was a problem with file selecting. Please select another file")
+				builder.setTitle(R.string.error_selecting_file_title).setMessage(R.string.error_selecting_file)
 				.setPositiveButton(android.R.string.ok, null);
 				AlertDialog dialog = builder.create();
 				dialog.show();
@@ -159,11 +159,12 @@ public class RecipientsActivity extends ListActivity {
 			public void done(ParseException e) {
 				if(e == null){
 					//success
-					Toast.makeText(RecipientsActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
+					Toast.makeText(RecipientsActivity.this, R.string.success_message, Toast.LENGTH_LONG).show();
 				}
 				else{
 					AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
-					builder.setTitle("We're sorry!").setMessage("There was a problem with sending your message. Please try again")
+					builder.setTitle(R.string.error_selecting_file_title)
+					.setMessage(R.string.error_sending_message)
 					.setPositiveButton(android.R.string.ok, null);
 					AlertDialog dialog = builder.create();
 					dialog.show();

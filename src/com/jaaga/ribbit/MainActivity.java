@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -15,7 +14,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,13 +26,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -328,10 +321,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		case R.id.action_logout:
 			ParseUser.logOut();
         	navigateToLogin();
+        	break;
         	
 		case R.id.action_edit_friends:
 			Intent intent = new Intent(this,EditFriendsActivity.class);
         	startActivity(intent);
+        	break;
         	
 		case R.id.action_camera:
 			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -339,6 +334,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			
 			AlertDialog dialog = builder.create();
 			dialog.show();
+			break;
 		}
         
         return super.onOptionsItemSelected(item);
