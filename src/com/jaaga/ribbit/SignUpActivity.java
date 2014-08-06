@@ -21,6 +21,7 @@ public class SignUpActivity extends Activity {
 	protected EditText mPassword;
 	protected EditText mEmail;
 	protected Button mSignup;
+	protected Button mCancel;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,14 @@ public class SignUpActivity extends Activity {
 		mPassword = (EditText) findViewById(R.id.editText2);
 		mEmail = (EditText) findViewById(R.id.editText3);
 		mSignup = (Button) findViewById(R.id.signupbutton);
+		mCancel = (Button) findViewById(R.id.cancelbutton);
+		mCancel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				finish();
+			}
+		});
 		
 		mSignup.setOnClickListener(new OnClickListener() {
 			

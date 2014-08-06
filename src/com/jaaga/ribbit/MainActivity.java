@@ -218,7 +218,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             // this tab is selected.
             actionBar.addTab(
                     actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
+                            .setIcon(mSectionsPagerAdapter.getIcon(i))
                             .setTabListener(this));
         }
     }
@@ -396,7 +396,18 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             }
             return null;
         }
+        
+        public int getIcon(int position){
+        	switch (position) {
+            case 0:
+                return R.drawable.ic_tab_inbox;
+            case 1:
+                return R.drawable.ic_tab_friends;
+        	}
+        	return R.drawable.ic_tab_inbox;
+        }
     }
 
+    
 
 }
