@@ -2,22 +2,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jaaga.ribbit.InboxFragment" >
+    tools:context="com.jaaga.ribbit.ui.InboxFragment" >
 
-    <ListView
-        android:id="@android:id/list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:paddingBottom="@dimen/inbox_vertical_margin"
-        android:clipToPadding="false" >
-    </ListView>
+        android:layout_alignParentTop="true" >
 
-    <TextView 
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/inbox_vertical_margin" >
+        </ListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/empty_inbox"
-        />
+        android:text="@string/empty_inbox" />
+
 </RelativeLayout>
